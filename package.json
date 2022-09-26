@@ -1,0 +1,26 @@
+{
+  "name": "430-project-1",
+  "version": "1.0.0",
+  "description": "Project 1 for 430 class",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickybakes/430-project-1.git"
+  },
+  "author": "Nick Baker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickybakes/430-project-1/issues"
+  },
+  "homepage": "https://github.com/nickybakes/430-project-1#readme",
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0"
+  }
+}
