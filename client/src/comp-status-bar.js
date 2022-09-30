@@ -5,15 +5,18 @@
 const template = document.createElement("template");
 template.innerHTML = `
 <link rel="stylesheet" type="text/css" href="appStyle.css">
-<div id="pixelGrid">
+<div id="statusBar">
+    <div id="colorSelectionBar">
 
+
+    </div>
 
 </div>
 
 `;
 
 //A header for the website, displays a title and a subtitle
-class PixelGrid extends HTMLElement {
+class StatusBar extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
         super();
@@ -26,21 +29,17 @@ class PixelGrid extends HTMLElement {
     }
 
     connectedCallback() {
-        this.grid = this.shadowRoot.querySelector('#pixelGrid');
+        this.bar = this.shadowRoot.querySelector('#statusBar');
 
-        for (let y = 0; y < 10; y++) {
-            for (let x = 0; x < 10; x++) {
-                this.grid.innerHTML += `<pixel-cell data-x='${x}' data-y='${y}'></pixel-cell>`;
-            }
-        }
+        // for (let y = 0; y < 10; y++) {
+        //     for (let x = 0; x < 10; x++) {
+        //         this.grid.innerHTML += `<pixel-cell data-x='${x}' data-y='${y}'></pixel-cell>`;
+        //     }
+        // }
     }
 
     disconnectedCallback() {
 
-    }
-
-    selectPixel() {
-        
     }
 
     //When an attribute changes, print it out for debug purposes
@@ -64,4 +63,4 @@ class PixelGrid extends HTMLElement {
 } //end class
 
 //finally, define the page-header HTML element
-customElements.define('pixel-grid', PixelGrid);
+customElements.define('status-bar', StatusBar);

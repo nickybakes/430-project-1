@@ -1,6 +1,8 @@
 //Nick Baker
 //9/26/2022
 
+import * as app from "./app.js";
+
 //Create the template html needed for this web component
 const template = document.createElement("template");
 template.innerHTML = `
@@ -28,11 +30,21 @@ class PixelCell extends HTMLElement {
     connectedCallback() {
         this.pixelCell = this.shadowRoot.querySelector('.pixelCell');
 
-        let hue = (Math.random()*360);
+        let hue = (Math.random() * 360);
 
-        console.log(hue);
+        // let color = app.colorPalette[Math.random() * 16]
 
         this.pixelCell.style.background = `hsl(${hue} 100% 50%)`;
+
+        this.pixelCell.onclick = this.clickOnPixel;
+    }
+
+    disconnectedCallback() {
+        this.pixelCell.onclick = null;
+    }
+
+    clickOnPixel() {
+        app.showStatusBar();
     }
 
     //When an attribute changes, print it out for debug purposes
