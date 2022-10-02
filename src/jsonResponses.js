@@ -1,5 +1,8 @@
 const query = require('querystring');
 
+//
+const pixels = {};
+
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   // gotta stringify to get it to just text (which we can actually send)

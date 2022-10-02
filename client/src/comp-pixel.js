@@ -29,41 +29,56 @@ class PixelCell extends HTMLElement {
 
     connectedCallback() {
         this.pixelCell = this.shadowRoot.querySelector('.pixelCell');
+        this.username = null;
 
         let hue = (Math.random() * 360);
 
+        let color = app.getColorFromPalette(Math.floor(Math.random() * app.getColorAmount()));
+
         // let color = app.colorPalette[Math.random() * 16]
 
-        this.pixelCell.style.background = `hsl(${hue} 100% 50%)`;
+        // this.pixelCell.style.background = `hsl(${hue} 100% 50%)`;
+        this.pixelCell.style.background = color;
 
-        this.pixelCell.onclick = this.clickOnPixel;
+        this.onclick = this.clickOnPixel;
     }
 
     disconnectedCallback() {
-        this.pixelCell.onclick = null;
+        this.onclick = null;
+    }
+
+    updatePixelProperties(props) {
+        this.pixelCell.style.background = app.getColorFromPalette(props.colorIndex);
+        this.username = props.username;
     }
 
     clickOnPixel() {
-        app.showStatusBar();
+        if (app.selectedPixel == this) {
+            app.hideStatusBar();
+            app.setSelectedPixel(null);
+        } else {
+            app.showStatusBar();
+            app.setSelectedPixel(this);
+        }
     }
 
     //When an attribute changes, print it out for debug purposes
     attributeChangedCallback(attributeName, oldVal, newVal) {
-        console.log(attributeName, oldVal, newVal);
+        // console.log(attributeName, oldVal, newVal);
         this.render();
     }
 
     //The attributes we want to observe
     static get observedAttributes() {
-        return ["data-year", "data-author"];
+        return ["data-x", "data-y"];
     }
 
     //Call this when anything on this component changes so it can be rerendered in the browser
     render() {
         //get attribute values, assign default if necessary
-        const author = this.dataset.author ? this.dataset.author : "Bobby BodyOdor";
-        const year = this.dataset.year ? this.dataset.year : "1970";
-        this.span.innerHTML = `&copy; ${year} ${author}`;
+        // const author = this.dataset.author ? this.dataset.author : "Bobby BodyOdor";
+        // const year = this.dataset.year ? this.dataset.year : "1970";
+        // this.span.innerHTML = `&copy; ${year} ${author}`;
     }
 } //end class
 

@@ -9,19 +9,19 @@ const urlStruct = {
 
   GET: {
     '/': htmlResponseHandler.getAppPage,
-    '/getUsers': jsonResponseHandler.getUsers,
+    '/getGrid': jsonResponseHandler.getUsers,
     '/notReal': jsonResponseHandler.notFound,
     index: htmlResponseHandler.getAppPage,
-    '/style.css': htmlResponseHandler.getStyle,
+    '/appStyle.css': htmlResponseHandler.getAppPage,
     notFound: jsonResponseHandler.notFound,
   },
   HEAD: {
-    '/getUsers': jsonResponseHandler.getUsersMeta,
+    '/getGrid': jsonResponseHandler.getUsersMeta,
     '/notReal': jsonResponseHandler.notFound,
     // notFound: jsonResponseHandler.notFoundMeta
   },
   POST: {
-    '/addUser': jsonResponseHandler.parseBody,
+    '/addPixel': jsonResponseHandler.parseBody,
   },
 };
 

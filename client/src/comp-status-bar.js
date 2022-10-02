@@ -1,16 +1,25 @@
 //Nick Baker
 //9/26/2022
 
+import * as app from "./app.js";
+
 //Create the template html needed for this web component
 const template = document.createElement("template");
 template.innerHTML = `
 <link rel="stylesheet" type="text/css" href="appStyle.css">
 <div id="statusBar">
-    <div id="colorSelectionBar">
+    <p id="pixelAuthorText">
+        Pixel placed by 
+    </p>
+    <div id="colorSelectionBarContainer">
+        <div id="colorSelectionBar">
 
 
+        </div>
     </div>
-
+    <div id="nameFieldContainer">
+        Username: <input id="nameField" type="text" name="name"/>
+    </div>
 </div>
 
 `;
@@ -30,6 +39,13 @@ class StatusBar extends HTMLElement {
 
     connectedCallback() {
         this.bar = this.shadowRoot.querySelector('#statusBar');
+        this.colorSelectionBar = this.shadowRoot.querySelector('#colorSelectionBar');
+
+        for (let i = 0; i < app.getColorAmount(); i++) {
+            this.colorSelectionBar.innerHTML += `
+                <color-selection data-color=${i}></div>
+            `;
+        }
 
         // for (let y = 0; y < 10; y++) {
         //     for (let x = 0; x < 10; x++) {
@@ -40,6 +56,12 @@ class StatusBar extends HTMLElement {
 
     disconnectedCallback() {
 
+    }
+
+    updateAuthor() {
+        if (app.getSelectedPixel() != null) {
+
+        }
     }
 
     //When an attribute changes, print it out for debug purposes

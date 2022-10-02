@@ -5,6 +5,7 @@ import * as app from "./app.js";
 import "./comp-pixel.js";
 import "./comp-pixel-grid.js";
 import "./comp-status-bar.js";
+import "./comp-color-selection.js";
 
 window.onload = () => {
 
