@@ -14,7 +14,8 @@ template.innerHTML = `
 
 `;
 
-//A header for the website, displays a title and a subtitle
+//Once of the colorful buttons shown on the status bar that
+//sets the selected pixel to this color
 class ColorSelection extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
@@ -44,6 +45,8 @@ class ColorSelection extends HTMLElement {
         this.render();
     }
 
+    //when we click on one of these color buttons, then set the currently selected
+    //pixel to this color
     clickOnSelection() {
         app.placePixel(this.dataset.color);
     }

@@ -24,7 +24,8 @@ template.innerHTML = `
 
 `;
 
-//A header for the website, displays a title and a subtitle
+//a floating menu at the bottom of the screen that lets us 
+//select colors and set a username
 class StatusBar extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
@@ -37,12 +38,15 @@ class StatusBar extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
+    //get references to our elements inside this
     connectedCallback() {
         this.bar = this.shadowRoot.querySelector('#statusBar');
         this.colorSelectionBar = this.shadowRoot.querySelector('#colorSelectionBar');
         this.authorDisplay = this.shadowRoot.querySelector('#pixelAuthorText');
         this.usernameField = this.shadowRoot.querySelector('#nameField');
 
+        //adds all the color selections needed to represent the whole
+        //color palette
         for (let i = 0; i < app.getColorAmount(); i++) {
             this.colorSelectionBar.innerHTML += `
                 <color-selection data-color=${i}></div>
@@ -54,10 +58,13 @@ class StatusBar extends HTMLElement {
 
     }
 
+    //returns the currently typed in username
     getCurrentUsername() {
         return this.usernameField.value;
     }
 
+    //gets the author from the currently selected pixel
+    //if there is no author, then say so!
     updateAuthor() {
         if (app.getSelectedPixel() != null) {
             let author = app.getSelectedPixel().getAuthor();

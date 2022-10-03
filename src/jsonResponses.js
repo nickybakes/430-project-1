@@ -1,6 +1,6 @@
 const query = require('querystring');
 
-// a list of added pixels, their color, and their author
+// a list of added pixels, their position index, their color index, and their author
 const pixels = {};
 
 // when a change to a pixel happens, we set this value to the current time
@@ -10,10 +10,12 @@ const pixels = {};
 // if not, dont send anything! saves on data yo!
 let lastUpdateTime;
 
+//when the server starts up, gotta set its first time stamp to something!
 const initLastUpdateTime = () => {
   lastUpdateTime = Date.now();
 };
 
+//sends a JSON response with status code and body to client
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json', lastUpdateTime });
   // gotta stringify to get it to just text (which we can actually send)
@@ -21,13 +23,15 @@ const respondJSON = (request, response, status, object) => {
   response.end();
 };
 
+//sends a JSON response with status code and NO body to client
 const respondJSONMeta = (request, response, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json', lastUpdateTime });
   // gotta stringify to get it to just text (which we can actually send)
   response.end();
 };
 
-// get user object
+//adds the object with our stored pixels to a json object and
+//sends it to the client
 const getGrid = (request, response) => {
   // json object to send
   const responseJSON = {
@@ -38,11 +42,17 @@ const getGrid = (request, response) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
-// just returns meta, no big message/data
+//sends the client just the time stamp of the server's latest update
+//should be used for the client to compare their timestamp
+//to the servers to see if it needs to fully update
 const getGridMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
 };
 
+//used with POST, client sends an object with positon index,
+//color index, and their username to the server, and this determines
+//if the user supplied a valid username, if the pixel has already been created
+//or if the pixel is new!
 const setPixel = (request, response, body) => {
   const responseJSON = {
     message: 'You need to type in a username!',
@@ -56,6 +66,7 @@ const setPixel = (request, response, body) => {
 
   let statusCode = 201;
 
+  // set time code;
   lastUpdateTime = Date.now();
 
   // if our pixel already exists:
@@ -73,13 +84,14 @@ const setPixel = (request, response, body) => {
     a: body.a,
   };
 
-  // set time code;
-
+  //store our new pixel and send back response
   pixels[body.i] = newPixel;
 
   return respondJSONMeta(request, response, statusCode);
 };
 
+//looks through the chunks of data the client is sending to the server
+//and properly parses out the body (paramaters that we sent)
 const parseBody = (request, response) => {
   const body = [];
 
@@ -101,6 +113,7 @@ const parseBody = (request, response) => {
   });
 };
 
+//404, couldnt find anything, get outta 'ere!
 const notFound = (request, response) => {
   const responseJSON = {
     message: 'The page you are looking for was not found.',
@@ -110,9 +123,7 @@ const notFound = (request, response) => {
   respondJSON(request, response, 404, responseJSON);
 };
 
-// exports to set functions to public.
-// In this syntax, you can do getIndex:getIndex, but if they
-// are the same name, you can short handle to just getIndex,
+//export our functions to be used in server.js
 module.exports = {
   getGrid,
   getGridMeta,

@@ -14,7 +14,7 @@ template.innerHTML = `
 
 `;
 
-//A header for the website, displays a title and a subtitle
+//the grid of pixels on the screen
 class PixelGrid extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
@@ -30,10 +30,10 @@ class PixelGrid extends HTMLElement {
     connectedCallback() {
         this.grid = this.shadowRoot.querySelector('#pixelGrid');
 
+        //when this loads in, add a 10x10 grid of pixel cell objects to this
         for (let y = 0; y < 10; y++) {
             for (let x = 0; x < 10; x++) {
                 this.grid.innerHTML += `<pixel-cell data-i='${x + (y * 10)}'></pixel-cell>`;
-                let child = this.grid.children[this.grid.childElementCount - 1];
             }
         }
     }
@@ -42,6 +42,7 @@ class PixelGrid extends HTMLElement {
 
     }
 
+    //when the server sends us new pixel data, update all the pixels that it sent us
     updateGrid(gridProps) {
         for (let p in gridProps) {
             this.grid.children[p].updatePixelProperties(gridProps[p]);

@@ -14,7 +14,7 @@ template.innerHTML = `
 
 `;
 
-//A header for the website, displays a title and a subtitle
+//displays a block of color on the pixel grid
 class PixelCell extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
@@ -36,6 +36,7 @@ class PixelCell extends HTMLElement {
         // let color = app.colorPalette[Math.random() * 16]
 
         // this.pixelCell.style.background = `hsl(${hue} 100% 50%)`;
+        //set default white color
         this.pixelCell.style.background = app.getColorFromPalette(12);
 
         this.onclick = this.clickOnPixel;
@@ -45,6 +46,8 @@ class PixelCell extends HTMLElement {
         this.onclick = null;
     }
 
+    //when the server sends the grid new shit, then update this
+    //pixel's css/data to show that change
     updatePixelProperties(props) {
         this.pixelCell.style.backgroundColor = app.getColorFromPalette(props.c);
         this.color = props.c;
@@ -56,13 +59,16 @@ class PixelCell extends HTMLElement {
         this.render();
     }
 
+    //returns the name of the author, or null of there is none
     getAuthor() {
         return this.author;
     }
 
+    //when we click on this pixel we want to set
+    //the currently selected pixel to this, and show the status bar
     clickOnPixel() {
-        console.log(this);
-        if (app.selectedPixel == this) {
+        //if we are clicking on the already selected pixel, then hide the status bar and deselect
+        if (app.getSelectedPixel() == this) {
             app.hideStatusBar();
             app.setSelectedPixel(null);
         } else {

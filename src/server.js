@@ -5,6 +5,8 @@ const jsonResponseHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+//our big structure of urls. when someone asks the server for something
+//it will check this like a dictionary for the function it should do
 const urlStruct = {
   GET: {
     '/': htmlResponseHandler.getAppPage,
@@ -30,6 +32,7 @@ const urlStruct = {
   },
 };
 
+//called when the server is requested to do/get something by a client
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
@@ -47,6 +50,7 @@ const onRequest = (request, response) => {
   }
 };
 
+//initializes the server
 http.createServer(onRequest).listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);
   jsonResponseHandler.initLastUpdateTime();
