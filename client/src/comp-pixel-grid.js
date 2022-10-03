@@ -1,6 +1,8 @@
 //Nick Baker
 //9/26/2022
 
+import * as app from "./app.js";
+
 //Create the template html needed for this web component
 const template = document.createElement("template");
 template.innerHTML = `
@@ -30,7 +32,8 @@ class PixelGrid extends HTMLElement {
 
         for (let y = 0; y < 10; y++) {
             for (let x = 0; x < 10; x++) {
-                this.grid.innerHTML += `<pixel-cell data-x='${x}' data-y='${y}'></pixel-cell>`;
+                this.grid.innerHTML += `<pixel-cell data-i='${x + (y * 10)}'></pixel-cell>`;
+                let child = this.grid.children[this.grid.childElementCount - 1];
             }
         }
     }
@@ -40,14 +43,14 @@ class PixelGrid extends HTMLElement {
     }
 
     updateGrid(gridProps) {
-        for(p in gridProps){
-            let pixel = document.querySelector(`pixel-cell[data-x="${p.x}"]`);
+        for (let p in gridProps) {
+            this.grid.children[p].updatePixelProperties(gridProps[p]);
         }
+        app.updateStatusBar();
     }
 
     //When an attribute changes, print it out for debug purposes
     attributeChangedCallback(attributeName, oldVal, newVal) {
-        console.log(attributeName, oldVal, newVal);
         this.render();
     }
 
@@ -58,10 +61,7 @@ class PixelGrid extends HTMLElement {
 
     //Call this when anything on this component changes so it can be rerendered in the browser
     render() {
-        // //get attribute values, assign default if necessary
-        // const author = this.dataset.author ? this.dataset.author : "Bobby BodyOdor";
-        // const year = this.dataset.year ? this.dataset.year : "1970";
-        // this.span.innerHTML = `&copy; ${year} ${author}`;
+
     }
 } //end class
 

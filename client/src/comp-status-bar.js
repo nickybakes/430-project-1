@@ -18,7 +18,7 @@ template.innerHTML = `
         </div>
     </div>
     <div id="nameFieldContainer">
-        Username: <input id="nameField" type="text" name="name"/>
+        Username: <input id="nameField" type="text" name="name" maxlength="20"/>
     </div>
 </div>
 
@@ -40,28 +40,35 @@ class StatusBar extends HTMLElement {
     connectedCallback() {
         this.bar = this.shadowRoot.querySelector('#statusBar');
         this.colorSelectionBar = this.shadowRoot.querySelector('#colorSelectionBar');
+        this.authorDisplay = this.shadowRoot.querySelector('#pixelAuthorText');
+        this.usernameField = this.shadowRoot.querySelector('#nameField');
 
         for (let i = 0; i < app.getColorAmount(); i++) {
             this.colorSelectionBar.innerHTML += `
                 <color-selection data-color=${i}></div>
             `;
         }
-
-        // for (let y = 0; y < 10; y++) {
-        //     for (let x = 0; x < 10; x++) {
-        //         this.grid.innerHTML += `<pixel-cell data-x='${x}' data-y='${y}'></pixel-cell>`;
-        //     }
-        // }
     }
 
     disconnectedCallback() {
 
     }
 
+    getCurrentUsername() {
+        return this.usernameField.value;
+    }
+
     updateAuthor() {
         if (app.getSelectedPixel() != null) {
-
+            let author = app.getSelectedPixel().getAuthor();
+            if (!author) {
+                this.authorDisplay.innerHTML = 'Nobody has placed a pixel here yet!'
+            } else {
+                this.authorDisplay.innerHTML = `Pixel placed by ${author}.`;
+            }
         }
+
+        this.render();
     }
 
     //When an attribute changes, print it out for debug purposes
@@ -77,10 +84,6 @@ class StatusBar extends HTMLElement {
 
     //Call this when anything on this component changes so it can be rerendered in the browser
     render() {
-        // //get attribute values, assign default if necessary
-        // const author = this.dataset.author ? this.dataset.author : "Bobby BodyOdor";
-        // const year = this.dataset.year ? this.dataset.year : "1970";
-        // this.span.innerHTML = `&copy; ${year} ${author}`;
     }
 } //end class
 

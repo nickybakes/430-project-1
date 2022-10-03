@@ -6,22 +6,27 @@ const jsonResponseHandler = require('./jsonResponses.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
-
   GET: {
     '/': htmlResponseHandler.getAppPage,
-    '/getGrid': jsonResponseHandler.getUsers,
+    '/getGrid': jsonResponseHandler.getGrid,
     '/notReal': jsonResponseHandler.notFound,
     index: htmlResponseHandler.getAppPage,
-    '/appStyle.css': htmlResponseHandler.getAppPage,
+    '/appStyle.css': htmlResponseHandler.getAppStyle,
+    '/src/app.js': htmlResponseHandler.getAppJs,
+    '/src/comp-color-selection.js': htmlResponseHandler.getCompColorSelectionJs,
+    '/src/comp-pixel-grid.js': htmlResponseHandler.getCompPixelGridJs,
+    '/src/comp-pixel.js': htmlResponseHandler.getCompPixelJs,
+    '/src/comp-status-bar.js': htmlResponseHandler.getCompStatusBarJs,
+    '/src/init.js': htmlResponseHandler.getInitJs,
     notFound: jsonResponseHandler.notFound,
   },
   HEAD: {
-    '/getGrid': jsonResponseHandler.getUsersMeta,
+    '/getGrid': jsonResponseHandler.getGridMeta,
     '/notReal': jsonResponseHandler.notFound,
     // notFound: jsonResponseHandler.notFoundMeta
   },
   POST: {
-    '/addPixel': jsonResponseHandler.parseBody,
+    '/setPixel': jsonResponseHandler.parseBody,
   },
 };
 
@@ -44,4 +49,5 @@ const onRequest = (request, response) => {
 
 http.createServer(onRequest).listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);
+  jsonResponseHandler.initLastUpdateTime();
 });

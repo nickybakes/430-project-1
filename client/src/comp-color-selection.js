@@ -30,18 +30,11 @@ class ColorSelection extends HTMLElement {
     connectedCallback() {
         this.colorSelection = this.shadowRoot.querySelector('.colorSelection');
 
-        // let color = app.colorPalette[Math.random() * 16]
-
-        // this.pixelCell.style.background = `hsl(${hue} 100% 50%)`;
         this.onclick = this.clickOnSelection;
     }
 
     disconnectedCallback() {
         this.onclick = null;
-    }
-
-    clickOnSelection() {
-
     }
 
     //When an attribute changes, print it out for debug purposes
@@ -51,6 +44,10 @@ class ColorSelection extends HTMLElement {
         this.render();
     }
 
+    clickOnSelection() {
+        app.placePixel(this.dataset.color);
+    }
+
     //The attributes we want to observe
     static get observedAttributes() {
         return ["data-color"];
@@ -58,12 +55,7 @@ class ColorSelection extends HTMLElement {
 
     //Call this when anything on this component changes so it can be rerendered in the browser
     render() {
-        const colorIndex = this.dataset.color ? this.dataset.color : "0";
-        this.colorSelection.style.background = app.getColorFromPalette(colorIndex);
-        //get attribute values, assign default if necessary
-        // const author = this.dataset.author ? this.dataset.author : "Bobby BodyOdor";
-        // const year = this.dataset.year ? this.dataset.year : "1970";
-        // this.span.innerHTML = `&copy; ${year} ${author}`;
+        this.colorSelection.style.background = app.getColorFromPalette(this.dataset.color);
     }
 } //end class
 

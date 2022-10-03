@@ -20,6 +20,8 @@ class PixelCell extends HTMLElement {
     constructor() {
         super();
 
+        this.color = 12;
+
         //attach a shadow dom to this
         this.attachShadow({ mode: "open" });
 
@@ -31,14 +33,10 @@ class PixelCell extends HTMLElement {
         this.pixelCell = this.shadowRoot.querySelector('.pixelCell');
         this.username = null;
 
-        let hue = (Math.random() * 360);
-
-        let color = app.getColorFromPalette(Math.floor(Math.random() * app.getColorAmount()));
-
         // let color = app.colorPalette[Math.random() * 16]
 
         // this.pixelCell.style.background = `hsl(${hue} 100% 50%)`;
-        this.pixelCell.style.background = color;
+        this.pixelCell.style.background = app.getColorFromPalette(12);
 
         this.onclick = this.clickOnPixel;
     }
@@ -48,17 +46,28 @@ class PixelCell extends HTMLElement {
     }
 
     updatePixelProperties(props) {
-        this.pixelCell.style.background = app.getColorFromPalette(props.colorIndex);
-        this.username = props.username;
+        this.pixelCell.style.backgroundColor = app.getColorFromPalette(props.c);
+        this.color = props.c;
+        this.author = props.a;
+
+        if (app.getSelectedPixel() == this)
+            app.updateStatusBar();
+
+        this.render();
+    }
+
+    getAuthor() {
+        return this.author;
     }
 
     clickOnPixel() {
+        console.log(this);
         if (app.selectedPixel == this) {
             app.hideStatusBar();
             app.setSelectedPixel(null);
         } else {
-            app.showStatusBar();
             app.setSelectedPixel(this);
+            app.showStatusBar();
         }
     }
 
@@ -70,15 +79,14 @@ class PixelCell extends HTMLElement {
 
     //The attributes we want to observe
     static get observedAttributes() {
-        return ["data-x", "data-y"];
+        return ["data-i", "data-color"];
     }
 
     //Call this when anything on this component changes so it can be rerendered in the browser
     render() {
-        //get attribute values, assign default if necessary
-        // const author = this.dataset.author ? this.dataset.author : "Bobby BodyOdor";
-        // const year = this.dataset.year ? this.dataset.year : "1970";
-        // this.span.innerHTML = `&copy; ${year} ${author}`;
+        if (this.color && this.pixelCell) {
+            this.pixelCell.style.background = app.getColorFromPalette(this.color);
+        }
     }
 } //end class
 

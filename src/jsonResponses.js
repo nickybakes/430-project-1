@@ -1,28 +1,37 @@
 const query = require('querystring');
 
-//
+// a list of added pixels, their color, and their author
 const pixels = {};
 
+// when a change to a pixel happens, we set this value to the current time
+// then when we want to get HEAD requests, we send this value a long so we
+// can compare it to the last update time the client has
+// if the client is older than the server, then send the updated info.
+// if not, dont send anything! saves on data yo!
+let lastUpdateTime;
+
+const initLastUpdateTime = () => {
+  lastUpdateTime = Date.now();
+}
+
 const respondJSON = (request, response, status, object) => {
-  response.writeHead(status, { 'Content-Type': 'application/json' });
+  response.writeHead(status, { 'Content-Type': 'application/json', 'lastUpdateTime': lastUpdateTime});
   // gotta stringify to get it to just text (which we can actually send)
   response.write(JSON.stringify(object));
   response.end();
 };
 
 const respondJSONMeta = (request, response, status) => {
-  response.writeHead(status, { 'Content-Type': 'application/json' });
+  response.writeHead(status, { 'Content-Type': 'application/json', 'lastUpdateTime': lastUpdateTime});
   // gotta stringify to get it to just text (which we can actually send)
   response.end();
 };
 
-const users = {};
-
 // get user object
-const getUsers = (request, response) => {
+const getGrid = (request, response) => {
   // json object to send
   const responseJSON = {
-    message: users,
+    message: pixels,
   };
 
   // return 200 with message
@@ -30,35 +39,43 @@ const getUsers = (request, response) => {
 };
 
 // just returns meta, no big message/data
-const getUsersMeta = (request, response) => {
+const getGridMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
 };
 
-const addUser = (request, response, body) => {
+const setPixel = (request, response, body) => {
   const responseJSON = {
-    message: 'Name and age are both required.',
+    message: 'You need to type in a username!',
   };
 
   // checks if the params are existent or not, if not -> bad request
-  if (!body.name || !body.age) {
-    responseJSON.id = 'addUserMissingParams';
+  if (!body.a) {
+    responseJSON.id = 'setPixelMissingUsername';
     return respondJSON(request, response, 400, responseJSON);
   }
 
-  let statusCode = 204;
+  let statusCode = 201;
 
-  if (!users[body.name]) {
-    statusCode = 201;
-    users[body.name] = {};
+  lastUpdateTime = Date.now();
+
+  // if our pixel already exists:
+  if (pixels[body.i]) {
+    statusCode = 204;
+    pixels[body.i].c = body.c;
+    pixels[body.i].a = body.a;
+    return respondJSONMeta(request, response, statusCode);
   }
 
-  users[body.name].name = body.name;
-  users[body.name].age = body.age;
+  // if not, make a new one!
+  const newPixel = {
+    i: body.i,
+    c: body.c,
+    a: body.a,
+  };
 
-  if (statusCode === 201) {
-    responseJSON.message = 'Created Successfully';
-    return respondJSON(request, response, statusCode, responseJSON);
-  }
+  // set time code;
+
+  pixels[body.i] = newPixel;
 
   return respondJSONMeta(request, response, statusCode);
 };
@@ -80,7 +97,7 @@ const parseBody = (request, response) => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
 
-    addUser(request, response, bodyParams);
+    setPixel(request, response, bodyParams);
   });
 };
 
@@ -97,9 +114,10 @@ const notFound = (request, response) => {
 // In this syntax, you can do getIndex:getIndex, but if they
 // are the same name, you can short handle to just getIndex,
 module.exports = {
-  getUsers,
-  getUsersMeta,
-  addUser,
+  getGrid,
+  getGridMeta,
+  setPixel,
   parseBody,
   notFound,
+  initLastUpdateTime,
 };
