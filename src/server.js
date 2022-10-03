@@ -5,12 +5,13 @@ const jsonResponseHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-//our big structure of urls. when someone asks the server for something
-//it will check this like a dictionary for the function it should do
+// our big structure of urls. when someone asks the server for something
+// it will check this like a dictionary for the function it should do
 const urlStruct = {
   GET: {
     '/': htmlResponseHandler.getAppPage,
     '/getGrid': jsonResponseHandler.getGrid,
+    '/getLeaderboard': jsonResponseHandler.parseBody,
     '/notReal': jsonResponseHandler.notFound,
     index: htmlResponseHandler.getAppPage,
     '/appStyle.css': htmlResponseHandler.getAppStyle,
@@ -32,11 +33,14 @@ const urlStruct = {
   },
 };
 
-//called when the server is requested to do/get something by a client
+// called when the server is requested to do/get something by a client
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
-  // as learned from the demo, we are only accepting GET and HEAD requests,
+  if(parsedUrl.pathname != '/getGrid')
+    console.log(request.url);
+
+  // we are only accepting GET, HEAD, and POST requests,
   // so for anything else, lets send a '404 not found' code
   if (!urlStruct[request.method]) {
     urlStruct.HEAD.notFound(request, response);
@@ -44,13 +48,13 @@ const onRequest = (request, response) => {
 
   // based on our request type, either call the GET or HEAD methods
   if (urlStruct[request.method][parsedUrl.pathname]) {
-    urlStruct[request.method][parsedUrl.pathname](request, response);
+    urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl.pathname);
   } else {
     urlStruct[request.method].notFound(request, response);
   }
 };
 
-//initializes the server
+// initializes the server
 http.createServer(onRequest).listen(port, () => {
   console.log(`Listening on 127.0.0.1: ${port}`);
   jsonResponseHandler.initLastUpdateTime();

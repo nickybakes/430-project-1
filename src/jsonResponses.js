@@ -42,6 +42,19 @@ const getGrid = (request, response) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
+//params will be:
+//c: colorIndex, -1 for ALL
+//b: true or false: count only whats on the current Board
+const getLeaderboard = (request, response, params) => {
+    // json object to send
+    const responseJSON = {
+      params
+    };
+  
+    // return 200 with message
+    return respondJSON(request, response, 200, responseJSON);
+};
+
 //sends the client just the time stamp of the server's latest update
 //should be used for the client to compare their timestamp
 //to the servers to see if it needs to fully update
@@ -90,9 +103,16 @@ const setPixel = (request, response, body) => {
   return respondJSONMeta(request, response, statusCode);
 };
 
+//used by the parseBody method below to know which function
+//to send the parsed body parameters and request/response to
+const pathFunction = {
+  '/getLeaderboard': getLeaderboard,
+  '/setPixel': setPixel
+}
+
 //looks through the chunks of data the client is sending to the server
 //and properly parses out the body (paramaters that we sent)
-const parseBody = (request, response) => {
+const parseBody = (request, response, path) => {
   const body = [];
 
   request.on('error', (error) => {
@@ -109,7 +129,7 @@ const parseBody = (request, response) => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
 
-    setPixel(request, response, bodyParams);
+    pathFunction[path](request, response, bodyParams);
   });
 };
 
@@ -127,7 +147,6 @@ const notFound = (request, response) => {
 module.exports = {
   getGrid,
   getGridMeta,
-  setPixel,
   parseBody,
   notFound,
   initLastUpdateTime,
