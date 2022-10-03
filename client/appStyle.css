@@ -147,4 +147,8 @@ h2{
     .message{
         margin-left: -30%;;
     }
+
+    #statusBar {
+        height: 40%;
+    }
 }

@@ -12,17 +12,17 @@ let lastUpdateTime;
 
 const initLastUpdateTime = () => {
   lastUpdateTime = Date.now();
-}
+};
 
 const respondJSON = (request, response, status, object) => {
-  response.writeHead(status, { 'Content-Type': 'application/json', 'lastUpdateTime': lastUpdateTime});
+  response.writeHead(status, { 'Content-Type': 'application/json', lastUpdateTime });
   // gotta stringify to get it to just text (which we can actually send)
   response.write(JSON.stringify(object));
   response.end();
 };
 
 const respondJSONMeta = (request, response, status) => {
-  response.writeHead(status, { 'Content-Type': 'application/json', 'lastUpdateTime': lastUpdateTime});
+  response.writeHead(status, { 'Content-Type': 'application/json', lastUpdateTime });
   // gotta stringify to get it to just text (which we can actually send)
   response.end();
 };
