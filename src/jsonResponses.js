@@ -3,6 +3,13 @@ const query = require('querystring');
 // a list of added pixels, their position index, their color index, and their author
 const pixels = {};
 
+const leaderboardUsers = {};
+const leaderboardColorsTotal = {
+  '-1': 0,
+  '0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0,
+  '9': 0, '10': 0, '11': 0, '12': 0, '13': 0, '14': 0, '15': 0
+};
+
 // when a change to a pixel happens, we set this value to the current time
 // then when we want to get HEAD requests, we send this value a long so we
 // can compare it to the last update time the client has
@@ -44,15 +51,16 @@ const getGrid = (request, response) => {
 
 //params will be:
 //c: colorIndex, -1 for ALL
-//b: true or false: count only whats on the current Board
+//a: true or false: all time data (true) or data from current
 const getLeaderboard = (request, response, params) => {
-    // json object to send
-    const responseJSON = {
-      params
-    };
-  
-    // return 200 with message
-    return respondJSON(request, response, 200, responseJSON);
+  // json object to send
+  const responseJSON = {
+    leaderboardColorsTotal,
+    leaderboardUsers
+  };
+
+  // return 200 with message
+  return respondJSON(request, response, 200, responseJSON);
 };
 
 //sends the client just the time stamp of the server's latest update
@@ -76,6 +84,23 @@ const setPixel = (request, response, body) => {
     responseJSON.id = 'setPixelMissingUsername';
     return respondJSON(request, response, 400, responseJSON);
   }
+
+  //if this user has never been added to the leadersboard
+  //then we should start them at 0
+  if (!leaderboardUsers[body.c][body.a]) {
+    leaderboardUsers[body.c][body.a] = 0;
+  }
+  if (!leaderboardUsers[body.c][body.a]) {
+    leaderboardUsers['-1'][body.a] = 0;
+  }
+
+  //increment the total time this color has been placed
+  leaderboardColorsTotal[body.c]++;
+  leaderboardColorsTotal['-1']++;
+
+  //increment how many times this user has placed this color
+  leaderboardUsers[body.c][body.a]++;
+  leaderboardUsers['-1'][body.a]++;
 
   let statusCode = 201;
 
@@ -103,16 +128,9 @@ const setPixel = (request, response, body) => {
   return respondJSONMeta(request, response, statusCode);
 };
 
-//used by the parseBody method below to know which function
-//to send the parsed body parameters and request/response to
-const pathFunction = {
-  '/getLeaderboard': getLeaderboard,
-  '/setPixel': setPixel
-}
-
 //looks through the chunks of data the client is sending to the server
 //and properly parses out the body (paramaters that we sent)
-const parseBody = (request, response, path) => {
+const parseBody = (request, response) => {
   const body = [];
 
   request.on('error', (error) => {
@@ -129,7 +147,7 @@ const parseBody = (request, response, path) => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
 
-    pathFunction[path](request, response, bodyParams);
+    setPixel(request, response, bodyParams);
   });
 };
 
@@ -147,6 +165,7 @@ const notFound = (request, response) => {
 module.exports = {
   getGrid,
   getGridMeta,
+  getLeaderboard,
   parseBody,
   notFound,
   initLastUpdateTime,

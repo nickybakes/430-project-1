@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const query = require('querystring');
 const htmlResponseHandler = require('./htmlResponses.js');
 const jsonResponseHandler = require('./jsonResponses.js');
 
@@ -11,7 +12,7 @@ const urlStruct = {
   GET: {
     '/': htmlResponseHandler.getAppPage,
     '/getGrid': jsonResponseHandler.getGrid,
-    '/getLeaderboard': jsonResponseHandler.parseBody,
+    '/getLeaderboard': jsonResponseHandler.getLeaderboard,
     '/notReal': jsonResponseHandler.notFound,
     index: htmlResponseHandler.getAppPage,
     '/appStyle.css': htmlResponseHandler.getAppStyle,
@@ -37,8 +38,10 @@ const urlStruct = {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
-  if(parsedUrl.pathname != '/getGrid')
-    console.log(request.url);
+
+  //grab the query parameters (?key=value&key2=value2&etc=etc)
+  //and parse them into a reusable object by field name
+  const params = query.parse(parsedUrl.query);
 
   // we are only accepting GET, HEAD, and POST requests,
   // so for anything else, lets send a '404 not found' code
@@ -48,7 +51,7 @@ const onRequest = (request, response) => {
 
   // based on our request type, either call the GET or HEAD methods
   if (urlStruct[request.method][parsedUrl.pathname]) {
-    urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl.pathname);
+    urlStruct[request.method][parsedUrl.pathname](request, response, params);
   } else {
     urlStruct[request.method].notFound(request, response);
   }
