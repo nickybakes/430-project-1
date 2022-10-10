@@ -3,7 +3,11 @@ const query = require('querystring');
 // a list of added pixels, their position index, their color index, and their author
 const pixels = {};
 
-const leaderboardUsers = {};
+const leaderboardUsers = {
+  '-1': {},
+  '0': {}, '1': {}, '2': {}, '3': {}, '4': {}, '5': {}, '6': {}, '7': {}, '8': {},
+  '9': {}, '10': {}, '11': {}, '12': {}, '13': {}, '14': {}, '15': {}
+};
 const leaderboardColorsTotal = {
   '-1': 0,
   '0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '8': 0,
@@ -90,7 +94,7 @@ const setPixel = (request, response, body) => {
   if (!leaderboardUsers[body.c][body.a]) {
     leaderboardUsers[body.c][body.a] = 0;
   }
-  if (!leaderboardUsers[body.c][body.a]) {
+  if (!leaderboardUsers['-1'][body.a]) {
     leaderboardUsers['-1'][body.a] = 0;
   }
 

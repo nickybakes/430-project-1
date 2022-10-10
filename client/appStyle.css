@@ -13,12 +13,12 @@ body {
     background-color: rgb(18, 18, 18);
 }
 
-h1{
+h1 {
     text-align: center;
     font-size: 4em;
 }
 
-h2{
+h2 {
     text-align: center;
     font-size: 1.5em;
 }
@@ -72,7 +72,7 @@ h2{
     height: 25%;
 }
 
-#colorSelectionBar{
+#colorSelectionBar {
     display: grid;
     width: 100%;
     height: 100%;
@@ -80,29 +80,29 @@ h2{
     grid-template-columns: repeat(16, auto);
 }
 
-.colorSelection{
+.colorSelection {
     /* margin: 0 .3em; */
     background-color: rgb(255, 0, 0);
     border: rgba(219, 219, 219, 0.3) 3px solid;
     height: 100%;
 }
 
-.colorSelection:hover{
+.colorSelection:hover {
     transform: scale(1.2);
     box-shadow: black 0 0 15px;
 }
 
-#pixelAuthorText{
+#pixelAuthorText {
     text-align: center;
 }
 
-#nameFieldContainer{
+#nameFieldContainer {
     text-align: center;
     display: block;
     margin: 0 auto;
 }
 
-#nameField{
+#nameField {
     text-align: center;
     font-size: 1.5em;
 }
@@ -129,6 +129,17 @@ h2{
     pointer-events: none
 }
 
+#leaderBoard {
+    width: 20vw;
+    height: 100%;
+    background-color: #1f1f1f;
+    border-right: solid 2px #FFFFFF14;
+    position: fixed;
+    left: 0;
+    top: 0;
+    /* transform: translateX(100%); */
+}
+
 @media screen and (max-width:1200px) {
     #colorSelectionBarContainer {
         width: 85%;
@@ -136,7 +147,7 @@ h2{
     }
 
 
-    #colorSelectionBar{
+    #colorSelectionBar {
         display: grid;
         width: 100%;
         height: 100%;
@@ -144,8 +155,9 @@ h2{
         grid-template-columns: repeat(8, auto);
     }
 
-    .message{
-        margin-left: -30%;;
+    .message {
+        margin-left: -30%;
+        ;
     }
 
     #statusBar {

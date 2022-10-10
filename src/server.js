@@ -21,6 +21,7 @@ const urlStruct = {
     '/src/comp-pixel-grid.js': htmlResponseHandler.getCompPixelGridJs,
     '/src/comp-pixel.js': htmlResponseHandler.getCompPixelJs,
     '/src/comp-status-bar.js': htmlResponseHandler.getCompStatusBarJs,
+    '/src/comp-leader-board.js': htmlResponseHandler.getCompLeaderBoardJs,
     '/src/init.js': htmlResponseHandler.getInitJs,
     notFound: jsonResponseHandler.notFound,
   },

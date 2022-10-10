@@ -7,6 +7,7 @@ const compColorSelection = fs.readFileSync(`${__dirname}/../client/src/comp-colo
 const compPixelGrid = fs.readFileSync(`${__dirname}/../client/src/comp-pixel-grid.js`);
 const compPixel = fs.readFileSync(`${__dirname}/../client/src/comp-pixel.js`);
 const compStatusBar = fs.readFileSync(`${__dirname}/../client/src/comp-status-bar.js`);
+const compLeaderBoard = fs.readFileSync(`${__dirname}/../client/src/comp-leader-board.js`);
 const init = fs.readFileSync(`${__dirname}/../client/src/init.js`);
 
 // gets our loaded index page (html)
@@ -49,6 +50,10 @@ const getCompStatusBarJs = (request, response) => {
   getJs(request, response, compStatusBar);
 };
 
+const getCompLeaderBoardJs = (request, response) => {
+  getJs(request, response, compLeaderBoard);
+};
+
 const getInitJs = (request, response) => {
   getJs(request, response, init);
 };
@@ -61,5 +66,6 @@ module.exports = {
   getCompPixelGridJs,
   getCompPixelJs,
   getCompStatusBarJs,
+  getCompLeaderBoardJs,
   getInitJs,
 };

@@ -6,6 +6,7 @@ import "./comp-pixel.js";
 import "./comp-pixel-grid.js";
 import "./comp-status-bar.js";
 import "./comp-color-selection.js";
+import "./comp-leader-board.js";
 
 window.onload = () => {
 
