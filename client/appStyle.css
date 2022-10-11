@@ -46,6 +46,7 @@ h2 {
     position: fixed;
     bottom: 0;
     transform: translateY(100%);
+    box-shadow: black 0 0 20px;
 }
 
 
@@ -209,7 +210,8 @@ h2 {
     left: 0;
     top: 0;
     transform: translateX(-100%);
-    overflow-y: auto
+    overflow-y: auto;
+    box-shadow: black 0 0 20px;
 }
 
 #leaderBoardCenter {
