@@ -3,6 +3,8 @@ const query = require('querystring');
 // a list of added pixels, their position index, their color index, and their author
 const pixels = {};
 
+// stores how many each specific user has placed of each
+// individual color. -1 is all colors.
 const leaderboardUsers = {
   '-1': {},
   0: {},
@@ -22,6 +24,9 @@ const leaderboardUsers = {
   14: {},
   15: {},
 };
+
+// stores how many total pixels of that color have
+// have been placed. -1 is all colors
 const leaderboardColorsTotal = {
   '-1': 0,
   0: 0,
@@ -192,6 +197,11 @@ const notFound = (request, response) => {
   respondJSON(request, response, 404, responseJSON);
 };
 
+// 404, couldnt find anything, get outta 'ere (but without JSON body)!
+const notFoundMeta = (request, response) => {
+  respondJSONMeta(request, response, 404);
+};
+
 // export our functions to be used in server.js
 module.exports = {
   getGrid,
@@ -199,5 +209,6 @@ module.exports = {
   getLeaderboard,
   parseBody,
   notFound,
+  notFoundMeta,
   initLastUpdateTime,
 };

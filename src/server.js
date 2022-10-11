@@ -28,11 +28,13 @@ const urlStruct = {
   },
   HEAD: {
     '/getGrid': jsonResponseHandler.getGridMeta,
+    '/getLeaderboard': jsonResponseHandler.getGridMeta,
     '/notReal': jsonResponseHandler.notFound,
-    // notFound: jsonResponseHandler.notFoundMeta
+    notFound: jsonResponseHandler.notFoundMeta,
   },
   POST: {
     '/setPixel': jsonResponseHandler.parseBody,
+    notFound: jsonResponseHandler.notFoundMeta,
   },
 };
 

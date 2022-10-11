@@ -13,8 +13,8 @@ template.innerHTML = `
 
 `;
 
-//Once of the colorful buttons shown on the status bar that
-//sets the selected pixel to this color
+//Once of the colorful buttons shown in the leaderboard that
+//sets the search color to this color
 class ColorSearchButton extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
@@ -27,14 +27,16 @@ class ColorSearchButton extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
+    //when this element loads up, add its onclick callback
     connectedCallback() {
         this.colorSearchButton = this.shadowRoot.querySelector('.colorSearchButton');
-
+        
+        //if this is the -1 button, then its the rainbow All colors button
         if (this.dataset.color == -1) {
             this.colorSearchButton.classList.add('rainbowBackground');
             this.colorSearchButton.classList.add('all');
-            this.colorSearchButton.classList.add('selected');
             this.colorSearchButton.innerHTML = "<p style='text-align: center; font-size: 1em;'>All</p>";
+            app.setSelectedColorSearch(this);
         }
 
         this.onclick = this.clickOnSelection;
@@ -50,10 +52,11 @@ class ColorSearchButton extends HTMLElement {
         this.render();
     }
 
-    //when we click on one of these color buttons, then set the currently selected
-    //pixel to this color
+    //when we click on one of these color search buttons
+    //then we need to set it as selected
+    //and query the leaderboard for this color's data
     clickOnSelection() {
-        // app.placePixel(this.dataset.color);
+        app.setSelectedColorSearch(this);
     }
 
     //The attributes we want to observe
@@ -63,9 +66,11 @@ class ColorSearchButton extends HTMLElement {
 
     //Call this when anything on this component changes so it can be rerendered in the browser
     render() {
-        this.colorSearchButton.style.background = app.getColorFromPalette(this.dataset.color);
+        //set the background color to the one from the color palette
+        if(this.dataset.color != -1)
+            this.colorSearchButton.style.background = app.getColorFromPalette(this.dataset.color);
     }
 } //end class
 
-//finally, define the page-header HTML element
+//finally, define the color-search-button HTML element
 customElements.define('color-search-button', ColorSearchButton);

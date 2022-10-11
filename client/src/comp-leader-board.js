@@ -23,16 +23,6 @@ template.innerHTML = `
             There have been 999999 tiles placed.
         </p>
         <div id="leaderBoardRankingGrid">
-        <p>1.</p><p>nickybakes</p><p>999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
-        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
         </div>
     </div>
     
@@ -40,8 +30,8 @@ template.innerHTML = `
 
 `;
 
-//a floating menu at the bottom of the screen that lets us 
-//select colors and set a username
+//a floating menu at the side of the screen that lets us 
+//see who has placed the most of each color
 class LeaderBoard extends HTMLElement {
     //attaches a shadow DOM to this and clone the template
     constructor() {
@@ -52,12 +42,15 @@ class LeaderBoard extends HTMLElement {
 
         //create template and append it
         this.shadowRoot.appendChild(template.content.cloneNode(true));
+
     }
 
     //get references to our elements inside this
     connectedCallback() {
         this.panel = this.shadowRoot.querySelector('#leaderBoard');
         this.colorSearchGrid = this.shadowRoot.querySelector('#colorSearchGrid');
+        this.leaderBoardRankingGrid = this.shadowRoot.querySelector('#leaderBoardRankingGrid');
+        this.totalPlacedText = this.shadowRoot.querySelector('.totalPlacedText');
 
         for (let i = 0; i < app.getColorAmount(); i++) {
             this.colorSearchGrid.innerHTML += `
@@ -66,33 +59,46 @@ class LeaderBoard extends HTMLElement {
         }
     }
 
-    disconnectedCallback() {
+    //when the server sends us new leaderboard data, update the rankings being shown
+    updateLeaderboard(data) {
+        this.totalPlacedText = this.shadowRoot.querySelector('.totalPlacedText');
+        this.leaderBoardRankingGrid = this.shadowRoot.querySelector('#leaderBoardRankingGrid');
 
+        //sets the text to show how tiles of that color have been placed
+        //and make it grammatically correct if 1 pixel is placed
+        if (data.total == 1) {
+            this.totalPlacedText.innerHTML = `There has been ${data.total} ${app.getSelectedColorSearchName()} pixel placed.`
+        } else {
+            this.totalPlacedText.innerHTML = `There have been ${data.total} ${app.getSelectedColorSearchName()} pixels placed.`
+        }
+
+        let users = Object.entries(data.users);
+
+        this.leaderBoardRankingGrid.innerHTML = "";
+
+        //sort by amount of pixels each user has placed
+        //if they tie, then sort alphabetically
+        if (users.length > 0) {
+            users.sort((a, b) => {
+                if (a[1] != b[1]) {
+                    return b[1] - a[1];
+                } else {
+                    return a[0].localeCompare(b[0]);
+                }
+            });
+
+            //finally, add the info of ranking, username, and amount to the leaderboard
+            for (let i = 0; i < users.length; i++) {
+                this.leaderBoardRankingGrid.innerHTML += `<p>${(i + 1)}.</p>`;
+                this.leaderBoardRankingGrid.innerHTML += `<p>${users[i][0]}</p>`;
+                this.leaderBoardRankingGrid.innerHTML += `<p style="text-align: right;">${users[i][1]}</p>`;
+            }
+        }
     }
 
-    //returns the currently typed in username
-    getCurrentUsername() {
-        // return this.usernameField.value;
-    }
-
-    //gets the author from the currently selected pixel
-    //if there is no author, then say so!
-    updateAuthor() {
-        // if (app.getSelectedPixel() != null) {
-        //     let author = app.getSelectedPixel().getAuthor();
-        //     if (!author) {
-        //         this.authorDisplay.innerHTML = 'Nobody has placed a pixel here yet!'
-        //     } else {
-        //         this.authorDisplay.innerHTML = `Pixel placed by ${author}.`;
-        //     }
-        // }
-
-        // this.render();
-    }
 
     //When an attribute changes, print it out for debug purposes
     attributeChangedCallback(attributeName, oldVal, newVal) {
-        console.log(attributeName, oldVal, newVal);
         this.render();
     }
 
@@ -106,5 +112,5 @@ class LeaderBoard extends HTMLElement {
     }
 } //end class
 
-//finally, define the page-header HTML element
+//finally, define the leader board HTML element
 customElements.define('leader-board', LeaderBoard);

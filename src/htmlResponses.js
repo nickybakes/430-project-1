@@ -25,40 +25,49 @@ const getAppStyle = (request, response) => {
   response.end();
 };
 
+// writes a specifical JS file to the response and ends the response
 const getJs = (request, response, jsFile) => {
   response.writeHead(200, { 'Content-Type': 'text/javascript' });
   response.write(jsFile);
   response.end();
 };
 
+// gets app.js
 const getAppJs = (request, response) => {
   getJs(request, response, appJs);
 };
 
+// gets comp-color-selection.js
 const getCompColorSelectionJs = (request, response) => {
   getJs(request, response, compColorSelection);
 };
 
+// gets comp-pixel-grid.js
 const getCompPixelGridJs = (request, response) => {
   getJs(request, response, compPixelGrid);
 };
 
+// gets comp-pixel.js
 const getCompPixelJs = (request, response) => {
   getJs(request, response, compPixel);
 };
 
+// gets comp-status-bar.js
 const getCompStatusBarJs = (request, response) => {
   getJs(request, response, compStatusBar);
 };
 
+// gets comp-leader-board.js
 const getCompLeaderBoardJs = (request, response) => {
   getJs(request, response, compLeaderBoard);
 };
 
+// gets comp-color-search-button.js
 const getCompColorSearchButtonJs = (request, response) => {
   getJs(request, response, compColorSearchButton);
 };
 
+// gets init.js
 const getInitJs = (request, response) => {
   getJs(request, response, init);
 };

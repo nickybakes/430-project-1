@@ -96,5 +96,5 @@ class PixelCell extends HTMLElement {
     }
 } //end class
 
-//finally, define the page-header HTML element
+//finally, define the pixel-cell HTML element
 customElements.define('pixel-cell', PixelCell);

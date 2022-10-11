@@ -62,5 +62,5 @@ class ColorSelection extends HTMLElement {
     }
 } //end class
 
-//finally, define the page-header HTML element
+//finally, define the color-selection HTML element
 customElements.define('color-selection', ColorSelection);

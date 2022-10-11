@@ -1,15 +1,27 @@
-//our html elements of our status bar and pixel grid
+//our html elements of our status bar, pixel grid
+//leaderboard panel, and leaderboard button
 let statusBar;
 let pixelGrid;
 let leaderboardPanel;
 let leaderboardButton;
 
+//true if the leaderboard is currently open
+let leaderboardPanelOpen = false;
+
 //the currently selected pixel (what the user clicked on)
 //will be null if clicked off of
 let selectedPixel;
 
+//the currently selected color search (what the user clicked on)
+//button in the leaderboard panel
+let selectedColorSearchButton;
+
 //our color palette that we want to use
 const colorPalette = ["#ff4500", "#ff9100", "#ffd635", "#7eed56", "#00a368", "#51e9f4", "#3690ea", "#2450a4", "#811e9f", "#b44ac0", "#ff99aa", "#9c6926", "#ffffff", "#d4d7d9", "#898d90", "#000000"];
+
+//the names of our colors in the color palette
+const colorPaletteNames = ["red", "orange", "yellow", "light green", "green", "light blue", "blue", "dark blue", "purple", "light purple", "pink", "brown", "white", "light gray", "gray", "black"];
+
 
 //the last time the client updated from the server
 //compared to the server's timestamp to see if the client needs
@@ -17,7 +29,7 @@ const colorPalette = ["#ff4500", "#ff9100", "#ffd635", "#7eed56", "#00a368", "#5
 let lastUpdateTime;
 
 //Handles all reponses from the server
-const handleResponse = async (response) => {
+const handleResponse = async (response, action) => {
 
     //check the different status codes
     //200, 201, and 204 lead to updating the grid possibly
@@ -62,28 +74,46 @@ const handleResponse = async (response) => {
 
         let responseJsonObject = JSON.parse(responseText);
 
-        pixelGrid.updateGrid(responseJsonObject.message);
+        switch (action) {
+            case '/getGrid':
+                pixelGrid.updateGrid(responseJsonObject.message);
+                break;
+
+            case '/getLeaderboard':
+                if(leaderboardPanel != undefined)
+                    leaderboardPanel.updateLeaderboard(responseJsonObject);
+                break;
+        }
+
     } else {
         //if our client's last update time is less than the server's, then we need
         //to get the most recent grid data, so call a request!
         if (lastUpdateTime < serverLastUpdateTime) {
-            requestUpdate('GET');
+            requestUpdate('GET', '/getGrid');
+            if (leaderboardPanelOpen)
+                requestLeaderboardUpdate();
         }
     }
 };
+
+//does a get request for leaderboard stats with
+//query params
+function requestLeaderboardUpdate() {
+    requestUpdate('GET', '/getLeaderboard', `?c=${selectedColorSearchButton.dataset.color}`);
+}
 
 //send a request to the server for the grid info
 //method can be GET or HEAD
 //GET gets the full grid info
 //HEAD just gets the timestamp header
-const requestUpdate = async (method) => {
+const requestUpdate = async (method, action, addon = "") => {
     let params = {
         method,
         headers: { 'Accept': 'application/json' },
     }
 
-    let response = await fetch('/getGrid', params);
-    handleResponse(response);
+    let response = await fetch(action + addon, params);
+    handleResponse(response, action);
 };
 
 //Used when we want to set a pixel on the server
@@ -114,11 +144,11 @@ export function init() {
     // const nameForm = document.querySelector("#pixelGrid");
     setupUI();
     lastUpdateTime = 0;
-    requestUpdate('GET');
+    requestUpdate('GET', '/getGrid');
     //pings our server every couple seconds with HEAD requests
     //so that the grid can stay updated in basically real time
     setInterval(function () {
-        requestUpdate('HEAD');
+        requestUpdate('HEAD', '/getGrid');
     }, 2000);
 };
 
@@ -168,7 +198,7 @@ export function placePixel(colorIndex) {
 //we also go a HEAD request when we do this to make sure the user
 //always has the most recent data
 export function setSelectedPixel(pixel) {
-    requestUpdate('HEAD');
+    requestUpdate('HEAD', '/getGrid');
     //adds the selected class CSS to the new selected pixel
     //and removes it from the previously selected pixel
     if (selectedPixel != null) {
@@ -178,6 +208,29 @@ export function setSelectedPixel(pixel) {
         pixel.pixelCell.classList.add('selected');
     }
     selectedPixel = pixel;
+}
+
+//sets the selected search color in the leaderboard
+export function setSelectedColorSearch(colorSearchButton) {
+    //adds the selected class CSS to the new selected button
+    //and removes it from the previously selected button
+    if (selectedColorSearchButton != null) {
+        selectedColorSearchButton.colorSearchButton.classList.remove('selected');
+    }
+    if (colorSearchButton != null) {
+        colorSearchButton.colorSearchButton.classList.add('selected');
+    }
+    selectedColorSearchButton = colorSearchButton;
+    requestLeaderboardUpdate();
+}
+
+//returns the name of the color of the currently
+//selected search color in the leaderboard
+export function getSelectedColorSearchName() {
+    if (selectedColorSearchButton.dataset.color == -1)
+        return "total";
+
+    return colorPaletteNames[selectedColorSearchButton.dataset.color];
 }
 
 //gets the length of the color palette
@@ -197,12 +250,15 @@ export function getSelectedPixel() {
 
 //shows the leaderboard panel at the left of the screen
 export function showLeaderBoard() {
+    leaderboardPanelOpen = true;
     hideStatusBar();
+    requestLeaderboardUpdate();
     leaderboardPanel.panel.style.transform = "translateX(0)";
 }
 
 //moves the leaderboard off screen
 export function hideLeaderBoard() {
+    leaderboardPanelOpen = false;
     leaderboardPanel.panel.style.transform = "translateX(-100%)";
 }
 

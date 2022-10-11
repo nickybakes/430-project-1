@@ -94,5 +94,5 @@ class StatusBar extends HTMLElement {
     }
 } //end class
 
-//finally, define the page-header HTML element
+//finally, define the status bar HTML element
 customElements.define('status-bar', StatusBar);

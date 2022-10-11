@@ -219,7 +219,8 @@ h2 {
 
 #leaderBoardRankingGrid {
     display: grid;
-    width: 100%;
+    margin: 0 auto;
+    width: 90%;
     height: 100%;
     column-gap: .25em;
     grid-template-columns: 10% 60% 30%;
@@ -251,7 +252,8 @@ h2 {
 .rainbowBackground {
     background: rgb(255, 69, 0);
     background: linear-gradient(90deg, rgba(255, 69, 0, 1) 0%, rgba(255, 145, 0, 1) 10%, rgba(255, 214, 53, 1) 20%, rgba(237, 235, 86, 1) 30%, rgba(11, 226, 101, 1) 40%, rgba(81, 244, 229, 1) 50%, rgba(81, 233, 244, 1) 60%, rgba(63, 147, 232, 1) 70%, rgba(67, 112, 199, 1) 80%, rgba(129, 30, 159, 1) 90%, rgba(180, 74, 192, 1) 100%);
-    background-size: 105%;
+    background-size: 108%;
+    background-position-x: 8%;
 }
 
 @media screen and (max-width:1200px) {

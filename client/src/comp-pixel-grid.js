@@ -66,5 +66,5 @@ class PixelGrid extends HTMLElement {
     }
 } //end class
 
-//finally, define the page-header HTML element
+//finally, define the pixel-grid HTML element
 customElements.define('pixel-grid', PixelGrid);
