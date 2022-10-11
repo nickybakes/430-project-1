@@ -64,7 +64,7 @@ class LeaderBoard extends HTMLElement {
         this.totalPlacedText = this.shadowRoot.querySelector('.totalPlacedText');
         this.leaderBoardRankingGrid = this.shadowRoot.querySelector('#leaderBoardRankingGrid');
 
-        //sets the text to show how tiles of that color have been placed
+        //sets the text to show how pixels of that color have been placed
         //and make it grammatically correct if 1 pixel is placed
         if (data.total == 1) {
             this.totalPlacedText.innerHTML = `There has been ${data.total} ${app.getSelectedColorSearchName()} pixel placed.`
