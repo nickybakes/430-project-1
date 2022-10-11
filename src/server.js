@@ -39,9 +39,8 @@ const urlStruct = {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
-
-  //grab the query parameters (?key=value&key2=value2&etc=etc)
-  //and parse them into a reusable object by field name
+  // grab the query parameters (?key=value&key2=value2&etc=etc)
+  // and parse them into a reusable object by field name
   const params = query.parse(parsedUrl.query);
 
   // we are only accepting GET, HEAD, and POST requests,
