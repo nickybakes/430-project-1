@@ -1,4 +1,5 @@
 const query = require('querystring');
+const firebase = require('./firebase.js');
 
 // a list of added pixels, their position index, their color index, and their author
 const pixels = {};
@@ -55,8 +56,9 @@ const leaderboardColorsTotal = {
 let lastUpdateTime;
 
 // when the server starts up, gotta set its first time stamp to something!
-const initLastUpdateTime = () => {
+const initServerData = () => {
   lastUpdateTime = Date.now();
+  firebase.readData();
 };
 
 // sends a JSON response with status code and body to client
@@ -210,5 +212,5 @@ module.exports = {
   parseBody,
   notFound,
   notFoundMeta,
-  initLastUpdateTime,
+  initServerData,
 };
