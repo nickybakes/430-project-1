@@ -284,6 +284,12 @@ h2 {
         width: 75vw;
     }
 
+    #leaderBoardRankingGrid {
+        width: 95%;
+        column-gap: .15em;
+        grid-template-columns: 6% 60% 34%;
+    }
+
     .sidePanelButton {
         font-size: 1.2em;
         padding: .5em;
