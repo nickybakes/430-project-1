@@ -18,7 +18,7 @@ template.innerHTML = `
         </div>
     </div>
     <div id="nameFieldContainer">
-        Username: <input id="nameField" type="text" name="name" maxlength="16"/>
+        Username: <input id="nameField" type="text" name="name" maxlength="14"/>
     </div>
 </div>
 

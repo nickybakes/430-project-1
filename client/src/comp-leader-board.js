@@ -90,7 +90,7 @@ class LeaderBoard extends HTMLElement {
             //finally, add the info of ranking, username, and amount to the leaderboard
             for (let i = 0; i < users.length; i++) {
                 this.leaderBoardRankingGrid.innerHTML += `<p>${(i + 1)}.</p>`;
-                this.leaderBoardRankingGrid.innerHTML += `<p>${users[i][0]}</p>`;
+                this.leaderBoardRankingGrid.innerHTML += `<p style="text-align: hidden;">${users[i][0]}</p>`;
                 this.leaderBoardRankingGrid.innerHTML += `<p style="text-align: right;">${users[i][1]}</p>`;
             }
         }
