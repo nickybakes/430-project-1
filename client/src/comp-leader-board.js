@@ -9,6 +9,33 @@ template.innerHTML = `
 <link rel="stylesheet" type="text/css" href="appStyle.css">
 <div id="leaderBoard">
 
+    <div id="leaderBoardCenter">
+        <p style="text-align: center">
+            See who placed the most of what color.
+        </p>
+            <color-search-button data-color="-1" class=".rainbowBackground"></color-search-button>
+        <div id="colorSearchGridContainer">
+            <div id="colorSearchGrid">
+
+            </div>
+        </div>
+        <p class="totalPlacedText" style="text-align: center">
+            There have been 999999 tiles placed.
+        </p>
+        <div id="leaderBoardRankingGrid">
+        <p>1.</p><p>nickybakes</p><p>999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        <p>20.</p><p>ABCDEFGHIJKLMNOP</p><p>999999</p>
+        </div>
+    </div>
+    
 </div>
 
 `;
@@ -29,18 +56,14 @@ class LeaderBoard extends HTMLElement {
 
     //get references to our elements inside this
     connectedCallback() {
-        // this.bar = this.shadowRoot.querySelector('#statusBar');
-        // this.colorSelectionBar = this.shadowRoot.querySelector('#colorSelectionBar');
-        // this.authorDisplay = this.shadowRoot.querySelector('#pixelAuthorText');
-        // this.usernameField = this.shadowRoot.querySelector('#nameField');
+        this.panel = this.shadowRoot.querySelector('#leaderBoard');
+        this.colorSearchGrid = this.shadowRoot.querySelector('#colorSearchGrid');
 
-        // //adds all the color selections needed to represent the whole
-        // //color palette
-        // for (let i = 0; i < app.getColorAmount(); i++) {
-        //     this.colorSelectionBar.innerHTML += `
-        //         <color-selection data-color=${i}></div>
-        //     `;
-        // }
+        for (let i = 0; i < app.getColorAmount(); i++) {
+            this.colorSearchGrid.innerHTML += `
+                <color-search-button data-color=${i}></color-search-button>
+            `;
+        }
     }
 
     disconnectedCallback() {

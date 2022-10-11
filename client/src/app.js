@@ -1,6 +1,8 @@
 //our html elements of our status bar and pixel grid
 let statusBar;
 let pixelGrid;
+let leaderboardPanel;
+let leaderboardButton;
 
 //the currently selected pixel (what the user clicked on)
 //will be null if clicked off of
@@ -125,12 +127,23 @@ export function init() {
 function setupUI() {
     statusBar = document.querySelector("status-bar");
     pixelGrid = document.querySelector("pixel-grid");
+    leaderboardPanel = document.querySelector("leader-board");
+    leaderboardButton = document.querySelector(".sidePanelButton");
+
+    leaderboardButton.onclick = e => {
+        showLeaderBoard();
+    }
+
 
     document.onclick = e => {
         //if they click on anything but a color picker modal, hide all color picker modals
         if (e.target.tagName != "PIXEL-GRID" && e.target.tagName != "STATUS-BAR") {
             setSelectedPixel(null);
             hideStatusBar();
+        }
+
+        if (e.target != leaderboardButton && e.target.tagName != "LEADER-BOARD") {
+            hideLeaderBoard();
         }
     }
 }
@@ -182,11 +195,23 @@ export function getSelectedPixel() {
     return selectedPixel;
 }
 
+//shows the leaderboard panel at the left of the screen
+export function showLeaderBoard() {
+    hideStatusBar();
+    leaderboardPanel.panel.style.transform = "translateX(0)";
+}
+
+//moves the leaderboard off screen
+export function hideLeaderBoard() {
+    leaderboardPanel.panel.style.transform = "translateX(-100%)";
+}
+
 //shows the Status bar at the bottom of the screen
 //and makes it check for updated to the "Author" of
 //the pixel being selected
 export function showStatusBar() {
     updateStatusBar();
+    hideLeaderBoard();
     statusBar.bar.style.transform = "translateY(0)";
 }
 

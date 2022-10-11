@@ -7,6 +7,7 @@ import "./comp-pixel-grid.js";
 import "./comp-status-bar.js";
 import "./comp-color-selection.js";
 import "./comp-leader-board.js";
+import "./comp-color-search-button.js";
 
 window.onload = () => {
 

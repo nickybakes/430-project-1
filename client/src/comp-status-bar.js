@@ -18,7 +18,7 @@ template.innerHTML = `
         </div>
     </div>
     <div id="nameFieldContainer">
-        Username: <input id="nameField" type="text" name="name" maxlength="20"/>
+        Username: <input id="nameField" type="text" name="name" maxlength="16"/>
     </div>
 </div>
 
@@ -49,7 +49,7 @@ class StatusBar extends HTMLElement {
         //color palette
         for (let i = 0; i < app.getColorAmount(); i++) {
             this.colorSelectionBar.innerHTML += `
-                <color-selection data-color=${i}></div>
+                <color-selection data-color=${i}></color-selection>
             `;
         }
     }
